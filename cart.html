@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+       
+<nav>
+    <h1><a href="index.html">FAKESHOP</a></h1>
+    <a href="cart.html">View Added cart</a>
+</nav>
+
+  <div id="cart-page">
+    <h1>Your Shopping Cart</h1>
+    <div id="cart-items"></div>
+    <div id="cart-total">
+      <p id="total-price">Total: $0</p>
+      <button id="checkout">Proceed to Checkout</button>
+    </div>
+  </div>
+  <script>
+    // cart.js
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cartItemsContainer = document.getElementById('cart-items');
+  const totalPriceEl = document.getElementById('total-price');
+  
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let totalPrice = 0;
+
+  // Display each item in the cart
+  function displayCartItems() {
+    cartItemsContainer.innerHTML = ''; // Clear existing items
+    cart.forEach((item, index) => {
+      const itemElement = document.createElement('div');
+      itemElement.classList.add('cart-item');
+      
+      itemElement.innerHTML = `
+        <span>${item.title} - $${item.price}</span>
+        <button onclick="removeFromCart(${index})">Remove</button>
+      `;
+      cartItemsContainer.appendChild(itemElement);
+
+      totalPrice += item.price;
+    });
+    totalPriceEl.innerText = `Total: $${totalPrice.toFixed(2)}`;
+  }
+
+  // Remove item from cart and update localStorage
+  window.removeFromCart = function(index) {
+    totalPrice -= cart[index].price;
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems(); // Re-render cart
+  }
+
+  // Initial call to display items
+  displayCartItems();
+});
+
+  </script>
+</body>
+</html>
